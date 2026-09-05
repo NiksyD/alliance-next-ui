@@ -64,21 +64,34 @@ export function Modal({
         role="dialog"
         aria-modal="true"
       >
-        <div className="flex items-start justify-between pb-3">
-          <div>
-            {title && <h2 className="text-xl font-bold tracking-tight text-slate-900">{title}</h2>}
-            {description && <p className="mt-1 text-sm text-slate-500">{description}</p>}
+        {/* Close Button: Absolute when header is absent, inline when header is present */}
+        {title || description ? (
+          <div className="flex items-start justify-between pb-3">
+            <div>
+              {title && (
+                <h2 className="text-xl font-bold tracking-tight text-slate-900">{title}</h2>
+              )}
+              {description && <p className="mt-1 text-sm text-slate-500">{description}</p>}
+            </div>
+            <button
+              onClick={onClose}
+              className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
+              aria-label="Close dialog"
+            >
+              <X className="h-5 w-5" />
+            </button>
           </div>
+        ) : (
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
+            className="absolute top-4 right-4 rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
             aria-label="Close dialog"
           >
-            <X className="h-5 w-5" />
+            <X className="h-4 w-4" />
           </button>
-        </div>
+        )}
 
-        <div className="mt-2">{children}</div>
+        <div>{children}</div>
       </div>
     </div>
   );

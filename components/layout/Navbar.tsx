@@ -16,7 +16,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 
-export function Navbar(): React.ReactElement {
+export function Navbar(): React.ReactElement | null {
   const pathname = usePathname();
   const currentUser = useAuthStore((s) => s.currentUser);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -35,6 +35,12 @@ export function Navbar(): React.ReactElement {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Industry Standard: Back-office portal routes have their own dedicated app shell (sidebar + breadcrumb bar).
+  // The consumer marketing/student navbar must not be rendered simultaneously.
+  if (isDashboardRoute) {
+    return null;
+  }
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/90 backdrop-blur-md">

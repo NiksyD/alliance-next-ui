@@ -2,13 +2,24 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useEventStore } from '@/stores/eventStore';
-import { Card } from '@/components/ui/Card';
-import { Input } from '@/components/ui/Input';
-import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
-import { Calendar, Clock, MapPin, Users, Award, ArrowLeft, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
+import { useEventStore } from '@/stores/eventStore';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import {
+  Calendar,
+  Clock,
+  MapPin,
+  Users,
+  Award,
+  ArrowLeft,
+  Sparkles,
+  CheckCircle2,
+  AlertCircle,
+  Building2,
+  CalendarCheck,
+  Eye,
+} from 'lucide-react';
 import type { EventType } from '@/types/events';
 
 export default function CreateEventPage(): React.ReactElement {
@@ -17,6 +28,7 @@ export default function CreateEventPage(): React.ReactElement {
   const venues = useEventStore((s) => s.venues);
   const createEvent = useEventStore((s) => s.createEvent);
 
+  // Form State
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [type, setType] = useState<EventType>('Workshop');
@@ -27,20 +39,28 @@ export default function CreateEventPage(): React.ReactElement {
   const [registrationDeadline, setRegistrationDeadline] = useState('2026-09-29 23:59');
   const [participantLimit, setParticipantLimit] = useState(100);
   const [certificateEligible, setCertificateEligible] = useState(true);
-  const [organizer, setOrganizer] = useState('Alliance Student Committee');
+  const [organizer, setOrganizer] = useState('Alliance Student Council');
 
-  const selectedVenue = venues.find((v) => v.id === venueId);
+  const selectedVenue = venues.find((v) => v.id === venueId) || venues[0];
+  const isOverCapacity = participantLimit > (selectedVenue?.capacity || 0);
+
+  // Computed Date for Preview
+  const dateObj = new Date(scheduleDate + 'T00:00:00');
+  const monthStr = isNaN(dateObj.getTime())
+    ? 'TBD'
+    : dateObj.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+  const dayStr = isNaN(dateObj.getTime()) ? '--' : dateObj.getDate();
 
   const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
-    if (!title.trim() || !venueId) return;
+    if (!title.trim()) return;
 
     createEvent({
       title,
       description,
       type,
       venueId,
-      venueName: selectedVenue?.name || 'TBD',
+      venueName: selectedVenue ? `${selectedVenue.name} (${selectedVenue.roomNumber})` : 'TBD',
       scheduleDate,
       startTime,
       endTime,
@@ -55,118 +75,166 @@ export default function CreateEventPage(): React.ReactElement {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--background)] px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-3xl">
-        <Link
-          href="/events"
-          className="mb-4 inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 transition-colors hover:text-slate-900"
-        >
-          <ArrowLeft className="h-4 w-4" /> Back to Event Catalog
-        </Link>
-
-        <div className="border-b border-slate-200 pb-6">
-          <Badge variant="primary">Transaction Form</Badge>
-          <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
-            Create & Post Event
-          </h1>
-          <p className="mt-1 text-sm text-slate-500">
-            Configure event details, validate venue room capacity, and publish registration slots.
-          </p>
+    <div className="space-y-6">
+      {/* Top Action Header */}
+      <div className="flex flex-col gap-4 border-b border-slate-200 pb-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          <Link
+            href="/events"
+            className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 shadow-2xs transition-colors hover:border-slate-300 hover:text-slate-900"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </Link>
+          <div>
+            <h1 className="text-xl font-bold tracking-tight text-slate-900">
+              Create & Publish Event
+            </h1>
+            <p className="text-xs text-slate-500">
+              Set event parameters, validate room capacity, and publish to campus roster.
+            </p>
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-6">
-          <Card className="space-y-5 p-6">
-            <h2 className="border-b border-slate-100 pb-3 text-base font-bold text-slate-900">
-              1. Event Overview & Classification
-            </h2>
+        <div className="flex items-center gap-2">
+          <Link href="/events">
+            <Button variant="outline" size="sm">
+              Discard
+            </Button>
+          </Link>
+          <Button
+            type="button"
+            variant="primary"
+            size="sm"
+            onClick={handleSubmit}
+            disabled={!title.trim() || isOverCapacity}
+            leftIcon={<CheckCircle2 className="h-4 w-4" />}
+            className="bg-slate-900 text-white hover:bg-slate-800"
+          >
+            Publish Event
+          </Button>
+        </div>
+      </div>
 
-            <Input
-              label="Event Title *"
-              placeholder="e.g. Alliance HackFest 2026: Campus Solutions"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
+      {/* 2-Column Creator Studio Layout (Jakob's Law: Form Left + Live Preview Right) */}
+      <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+        {/* Left Form Column (7 Cols) */}
+        <form onSubmit={handleSubmit} className="space-y-6 lg:col-span-7">
+          {/* Section 1: Core Details */}
+          <div className="space-y-5 rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs">
+            <div>
+              <label className="mb-2 block text-xs font-bold tracking-wider text-slate-500 uppercase">
+                Event Title *
+              </label>
+              <input
+                type="text"
+                required
+                placeholder="e.g. Alliance Annual Hackathon: Campus Solutions"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full border-b-2 border-slate-200 pb-2 text-lg font-bold tracking-tight text-slate-900 transition-colors placeholder:text-slate-300 focus:border-[var(--uc-blue)] focus:outline-none sm:text-xl"
+              />
+            </div>
 
-            <div className="space-y-1.5">
-              <label className="block text-xs font-semibold tracking-wider text-slate-700 uppercase">
-                Detailed Description
+            {/* Event Category Interactive Selector */}
+            <div>
+              <label className="mb-2 block text-xs font-bold tracking-wider text-slate-500 uppercase">
+                Event Classification *
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {eventTypes.map((t) => {
+                  const isSelected = type === t;
+                  return (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setType(t)}
+                      className={`cursor-pointer rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
+                        isSelected
+                          ? 'bg-[var(--uc-blue)] text-white shadow-xs'
+                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70'
+                      }`}
+                    >
+                      {t}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Description */}
+            <div className="space-y-1">
+              <label className="block text-xs font-bold tracking-wider text-slate-500 uppercase">
+                Summary / Objectives
               </label>
               <textarea
                 rows={3}
-                className="w-full rounded-lg border border-slate-200 bg-white p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[var(--uc-blue)] focus:ring-2 focus:ring-[var(--uc-blue)]/20 focus:outline-none"
-                placeholder="Explain the objectives, expected speakers, and agenda..."
+                placeholder="Briefly describe the topics covered, guest speakers, and eligibility..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                className="w-full resize-none rounded-xl border border-slate-200 p-3 text-xs text-slate-900 transition-all placeholder:text-slate-400 focus:border-[var(--uc-blue)] focus:ring-2 focus:ring-[var(--uc-blue)]/20 focus:outline-none sm:text-sm"
               />
             </div>
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold tracking-wider text-slate-700 uppercase">
-                  Event Type *
-                </label>
-                <select
-                  value={type}
-                  onChange={(e) => setType(e.target.value as EventType)}
-                  className="w-full rounded-lg border border-slate-200 bg-white p-2.5 text-sm font-semibold text-slate-800 shadow-xs focus:border-[var(--uc-blue)] focus:ring-2 focus:ring-[var(--uc-blue)]/20 focus:outline-none"
-                >
-                  {eventTypes.map((t) => (
-                    <option key={t} value={t}>
-                      {t}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
+            {/* Organizer */}
+            <div>
+              <label className="mb-1.5 block text-xs font-bold tracking-wider text-slate-500 uppercase">
+                Host Committee / Student Org
+              </label>
               <Input
-                label="Host Committee / Organizer"
                 value={organizer}
                 onChange={(e) => setOrganizer(e.target.value)}
+                placeholder="e.g. Alliance Computer Society"
               />
             </div>
-          </Card>
+          </div>
 
-          <Card className="space-y-5 p-6">
-            <h2 className="border-b border-slate-100 pb-3 text-base font-bold text-slate-900">
-              2. Venue & Room Scheduling
+          {/* Section 2: Date, Time & Venue Scheduling */}
+          <div className="space-y-5 rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs">
+            <h2 className="flex items-center gap-2 border-b border-slate-100 pb-3 text-sm font-bold tracking-wider text-slate-900 uppercase">
+              <CalendarCheck className="h-4 w-4 text-[var(--uc-blue)]" /> Venue & Scheduling
             </h2>
 
+            {/* Venue Selector */}
             <div>
-              <label className="mb-1.5 block text-xs font-semibold tracking-wider text-slate-700 uppercase">
-                Designated Campus Venue *
+              <label className="mb-2 block text-xs font-bold tracking-wider text-slate-500 uppercase">
+                Select Campus Venue *
               </label>
-              <select
-                value={venueId}
-                onChange={(e) => setVenueId(e.target.value)}
-                className="w-full rounded-lg border border-slate-200 bg-white p-2.5 text-sm font-semibold text-slate-800 shadow-xs focus:border-[var(--uc-blue)] focus:ring-2 focus:ring-[var(--uc-blue)]/20 focus:outline-none"
-              >
-                {venues.map((v) => (
-                  <option key={v.id} value={v.id}>
-                    {v.name} ({v.roomNumber}) — Max Capacity: {v.capacity} pax
-                  </option>
-                ))}
-              </select>
+              <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+                {venues.map((v) => {
+                  const isSelected = venueId === v.id;
+                  return (
+                    <button
+                      key={v.id}
+                      type="button"
+                      onClick={() => setVenueId(v.id)}
+                      className={`cursor-pointer rounded-xl border p-3 text-left transition-all ${
+                        isSelected
+                          ? 'border-[var(--uc-blue)] bg-[var(--uc-blue-container)]/30 ring-2 ring-[var(--uc-blue)]/20'
+                          : 'border-slate-200 bg-white hover:border-slate-300'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono text-[10px] font-bold text-[var(--uc-blue-deep)]">
+                          {v.roomNumber}
+                        </span>
+                        <span className="font-mono text-[10px] font-semibold text-slate-400">
+                          Cap: {v.capacity}
+                        </span>
+                      </div>
+                      <p className="mt-1 truncate text-xs leading-snug font-bold text-slate-800">
+                        {v.name}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
-            {selectedVenue && (
-              <div className="flex items-start justify-between rounded-lg border border-blue-200 bg-blue-50/60 p-3 text-xs text-blue-900">
-                <div>
-                  <span className="font-bold">{selectedVenue.location}</span>
-                  <p className="mt-0.5 text-[11px] text-blue-700">
-                    {selectedVenue.availabilityNotes}
-                  </p>
-                </div>
-                <span className="shrink-0 font-mono text-xs font-bold text-[var(--uc-blue-deep)]">
-                  Cap: {selectedVenue.capacity}
-                </span>
-              </div>
-            )}
-
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            {/* Schedule Inputs */}
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
               <Input
                 type="date"
-                label="Event Date"
+                label="Date"
                 value={scheduleDate}
                 onChange={(e) => setScheduleDate(e.target.value)}
                 required
@@ -186,63 +254,160 @@ export default function CreateEventPage(): React.ReactElement {
                 required
               />
             </div>
-          </Card>
+          </div>
 
-          <Card className="space-y-5 p-6">
-            <h2 className="border-b border-slate-100 pb-3 text-base font-bold text-slate-900">
-              3. Registration Rules & Certificate Criteria
+          {/* Section 3: Capacity & Certificate Automation */}
+          <div className="space-y-5 rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs">
+            <h2 className="flex items-center gap-2 border-b border-slate-100 pb-3 text-sm font-bold tracking-wider text-slate-900 uppercase">
+              <Users className="h-4 w-4 text-[var(--uc-gold-deep)]" /> Capacity & Ticketing Rules
             </h2>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <Input
-                type="number"
-                label="Participant Limit (Capacity)"
-                value={participantLimit}
-                onChange={(e) => setParticipantLimit(Number(e.target.value))}
-                min={1}
-                max={selectedVenue?.capacity || 1000}
-                required
-              />
+              <div>
+                <Input
+                  type="number"
+                  label="Target Attendance Cap *"
+                  min={1}
+                  value={participantLimit}
+                  onChange={(e) => setParticipantLimit(Number(e.target.value))}
+                  error={
+                    isOverCapacity
+                      ? `Exceeds room capacity (${selectedVenue?.capacity} pax)`
+                      : undefined
+                  }
+                  helperText={
+                    !isOverCapacity
+                      ? `Max safe capacity: ${selectedVenue?.capacity} seats`
+                      : undefined
+                  }
+                  required
+                />
+              </div>
 
-              <Input
-                label="Registration Deadline"
-                value={registrationDeadline}
-                onChange={(e) => setRegistrationDeadline(e.target.value)}
-                placeholder="YYYY-MM-DD HH:mm"
-                required
-              />
+              <div>
+                <Input
+                  label="Registration Deadline"
+                  value={registrationDeadline}
+                  onChange={(e) => setRegistrationDeadline(e.target.value)}
+                  placeholder="YYYY-MM-DD HH:mm"
+                />
+              </div>
             </div>
 
-            <div className="pt-2">
-              <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-slate-200 bg-slate-50/50 p-3 transition-colors hover:bg-slate-100">
+            {/* Certificate Toggle */}
+            <div className="border-t border-slate-100 pt-2">
+              <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-slate-50/50 p-3 transition-colors hover:bg-slate-100/70">
                 <input
                   type="checkbox"
                   checked={certificateEligible}
                   onChange={(e) => setCertificateEligible(e.target.checked)}
-                  className="h-4 w-4 cursor-pointer rounded-sm text-[var(--uc-blue)] focus:ring-[var(--uc-blue)]"
+                  className="mt-0.5 h-4 w-4 cursor-pointer rounded-sm text-[var(--uc-blue)] focus:ring-[var(--uc-blue)]"
                 />
                 <div>
-                  <span className="text-xs font-bold text-slate-800">
-                    Enable Certificate of Participation Eligibility
+                  <span className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
+                    <Award className="h-3.5 w-3.5 text-[var(--uc-gold-deep)]" />
+                    Automatic Participation Certificate Eligibility
                   </span>
-                  <p className="text-[11px] text-slate-500">
-                    Attendees who successfully check in at the door desk will be auto-marked as
-                    certificate eligible.
+                  <p className="mt-0.5 text-[11px] leading-normal text-slate-500">
+                    Students verified at the door scanner will be automatically granted eligibility
+                    for certificates.
                   </p>
                 </div>
               </label>
             </div>
-          </Card>
-
-          <div className="flex items-center justify-end gap-3 pt-2">
-            <Link href="/events">
-              <Button variant="outline">Cancel</Button>
-            </Link>
-            <Button type="submit" variant="primary" leftIcon={<CheckCircle className="h-4 w-4" />}>
-              Publish Event to Members
-            </Button>
           </div>
         </form>
+
+        {/* Right Preview Column: Live Event Card Preview (5 Cols, Sticky) */}
+        <div className="sticky top-24 space-y-4 lg:col-span-5">
+          <div className="flex items-center justify-between pb-1">
+            <span className="flex items-center gap-1.5 text-xs font-bold tracking-wider text-slate-400 uppercase">
+              <Eye className="h-3.5 w-3.5" /> Live Student View Preview
+            </span>
+            <span className="rounded-full bg-slate-100 px-2 py-0.5 font-mono text-[10px] font-bold text-slate-500">
+              Updates in Real-Time
+            </span>
+          </div>
+
+          {/* Live Rendered Event Card */}
+          <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm">
+            {/* Top Date Tile & Category */}
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex h-13 w-12 shrink-0 flex-col items-center justify-center rounded-xl border border-slate-200 bg-slate-50 font-mono shadow-2xs">
+                <span className="text-[10px] leading-none font-bold text-[var(--uc-blue)]">
+                  {monthStr}
+                </span>
+                <span className="text-lg leading-tight font-black text-slate-900">{dayStr}</span>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-end gap-1.5 text-right">
+                <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-600">
+                  {type}
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-md border border-emerald-200/60 bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
+                  {participantLimit} spots open
+                </span>
+              </div>
+            </div>
+
+            {/* Event Title */}
+            <div className="mt-4">
+              <h3 className="line-clamp-2 font-sans text-base leading-snug font-bold tracking-tight text-slate-900">
+                {title || 'Untitled Campus Event'}
+              </h3>
+              <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-slate-500">
+                {description || 'Event description will appear here as you type...'}
+              </p>
+            </div>
+
+            {/* Metadata */}
+            <div className="mt-4 space-y-1.5 border-t border-slate-100 pt-3 text-xs text-slate-600">
+              <div className="flex items-center gap-2">
+                <Clock className="h-3.5 w-3.5 shrink-0 text-slate-400" />
+                <span className="font-medium text-slate-700">
+                  {startTime} - {endTime}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <MapPin className="h-3.5 w-3.5 shrink-0 text-slate-400" />
+                <span className="truncate text-slate-600">
+                  {selectedVenue?.name} ({selectedVenue?.roomNumber})
+                </span>
+              </div>
+            </div>
+
+            {/* Capacity Meter */}
+            <div className="mt-5 border-t border-slate-100 pt-3.5">
+              <div className="mb-2 flex items-center justify-between font-mono text-[11px] text-slate-500">
+                <span>Registration Limit</span>
+                <span className="font-bold text-slate-800">0 / {participantLimit} (0%)</span>
+              </div>
+              <div className="h-1 w-full rounded-full bg-slate-100" />
+            </div>
+
+            {/* Simulated Action Button */}
+            <div className="mt-4">
+              <div className="w-full rounded-lg bg-slate-900 py-2 text-center text-xs font-bold text-white shadow-xs">
+                Claim Free Pass ↗
+              </div>
+            </div>
+          </div>
+
+          {/* Capacity Safeguard Notice */}
+          {selectedVenue && (
+            <div className="space-y-1 rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs">
+              <div className="flex items-center gap-1.5 font-bold text-slate-800">
+                <Building2 className="h-4 w-4 text-[var(--uc-blue)]" />
+                <span>Venue Specification: {selectedVenue.roomNumber}</span>
+              </div>
+              <p className="text-[11px] text-slate-500">{selectedVenue.location}</p>
+              <p className="font-mono text-[11px] text-slate-500">
+                Physical Capacity Limit: <strong>{selectedVenue.capacity} attendees</strong>
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

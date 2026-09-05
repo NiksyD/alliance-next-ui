@@ -24,7 +24,7 @@ export function Button({
   ...props
 }: ButtonProps): React.ReactElement {
   const baseStyles =
-    'inline-flex items-center justify-center font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] select-none cursor-pointer';
+    'inline-flex items-center justify-center font-semibold whitespace-nowrap transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] select-none cursor-pointer';
 
   const variants: Record<ButtonVariant, string> = {
     primary:
@@ -75,7 +75,9 @@ export function Button({
       ) : (
         leftIcon
       )}
-      <span>{children}</span>
+      <span className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap">
+        {children}
+      </span>
       {!isLoading && rightIcon}
     </button>
   );

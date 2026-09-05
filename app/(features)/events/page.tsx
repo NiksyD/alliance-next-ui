@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useEventStore } from '@/stores/eventStore';
 import { useAuthStore } from '@/stores/authStore';
@@ -9,41 +9,81 @@ import { TicketPassModal } from './components/TicketPassModal';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { Search, Plus, Calendar, Filter } from 'lucide-react';
-import type { EventItem, EventType } from '@/types/events';
+import { Dropdown } from '@/components/ui/Dropdown';
+import { Search, Plus, Calendar, Ticket, CheckCircle2, Info, X } from 'lucide-react';
+import type { EventItem } from '@/types/events';
+
+type EventViewScope = 'all' | 'my_passes';
 
 export default function EventsPage(): React.ReactElement {
   const events = useEventStore((s) => s.events);
   const eventTypes = useEventStore((s) => s.eventTypes);
   const registrations = useEventStore((s) => s.registrations);
   const registerForEvent = useEventStore((s) => s.registerForEvent);
+  const cancelRegistration = useEventStore((s) => s.cancelRegistration);
   const currentUser = useAuthStore((s) => s.currentUser);
 
+  const [scopeTab, setScopeTab] = useState<EventViewScope>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedType, setSelectedType] = useState<string>('All');
   const [selectedEventForModal, setSelectedEventForModal] = useState<EventItem | null>(null);
   const [isTicketModalOpen, setIsTicketModalOpen] = useState(false);
-  const [notification, setNotification] = useState<{
+  const [toast, setToast] = useState<{
     message: string;
     type: 'success' | 'info';
   } | null>(null);
 
-  const filteredEvents = events.filter((e) => {
-    const matchesSearch =
-      e.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      e.venueName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      e.organizer.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesType = selectedType === 'All' || e.type === selectedType;
-    return matchesSearch && matchesType;
-  });
+  // Active user registrations
+  const userRegistrations = useMemo(() => {
+    return registrations.filter((r) => r.studentId === currentUser.id && r.status !== 'cancelled');
+  }, [registrations, currentUser.id]);
+
+  const myPassesCount = userRegistrations.length;
+  const userRegisteredEventIds = useMemo(() => {
+    return new Set(userRegistrations.map((r) => r.eventId));
+  }, [userRegistrations]);
+
+  // Filter options for Dropdown
+  const typeDropdownOptions = useMemo(() => {
+    return [
+      { value: 'All', label: 'All Categories' },
+      ...eventTypes.map((type) => ({ value: type, label: type })),
+    ];
+  }, [eventTypes]);
+
+  // Filtered Events
+  const filteredEvents = useMemo(() => {
+    return events.filter((e) => {
+      // Scope filter
+      if (scopeTab === 'my_passes' && !userRegisteredEventIds.has(e.id)) {
+        return false;
+      }
+
+      // Keyword search
+      const q = searchQuery.toLowerCase().trim();
+      const matchesSearch =
+        !q ||
+        e.title.toLowerCase().includes(q) ||
+        e.venueName.toLowerCase().includes(q) ||
+        e.organizer.toLowerCase().includes(q);
+
+      // Type dropdown filter
+      const matchesType = selectedType === 'All' || e.type === selectedType;
+
+      return matchesSearch && matchesType;
+    });
+  }, [events, scopeTab, userRegisteredEventIds, searchQuery, selectedType]);
+
+  const showToast = (message: string, type: 'success' | 'info'): void => {
+    setToast({ message, type });
+    setTimeout(() => {
+      setToast((prev) => (prev?.message === message ? null : prev));
+    }, 4500);
+  };
 
   const handleClaimPass = (event: EventItem): void => {
     const result = registerForEvent(event.id, currentUser);
-    setNotification({
-      message: result.message,
-      type: result.success ? 'success' : 'info',
-    });
-    setTimeout(() => setNotification(null), 4000);
+    showToast(result.message, result.success ? 'success' : 'info');
 
     if (result.success) {
       setSelectedEventForModal(event);
@@ -56,6 +96,12 @@ export default function EventsPage(): React.ReactElement {
     setIsTicketModalOpen(true);
   };
 
+  const handleCancelRegistration = (eventId: string): void => {
+    cancelRegistration(eventId, currentUser.id);
+    setIsTicketModalOpen(false);
+    showToast('Registration cancelled. Your reserved spot has been released.', 'info');
+  };
+
   const activeRegistration = selectedEventForModal
     ? registrations.find(
         (r) => r.eventId === selectedEventForModal.id && r.studentId === currentUser.id,
@@ -66,7 +112,7 @@ export default function EventsPage(): React.ReactElement {
     <div className="min-h-screen bg-[var(--background)] px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         {/* Header with Title and Create Action for Officers */}
-        <div className="flex flex-col gap-4 border-b border-slate-200 pb-8 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-4 border-b border-slate-200 pb-7 md:flex-row md:items-center md:justify-between">
           <div>
             <div className="flex items-center gap-2">
               <Badge variant="primary">Campus Life</Badge>
@@ -74,7 +120,7 @@ export default function EventsPage(): React.ReactElement {
                 {events.length} Events Listed
               </span>
             </div>
-            <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+            <h1 className="mt-1.5 text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">
               Student Organization Events
             </h1>
             <p className="mt-1 text-sm text-slate-600">
@@ -95,78 +141,112 @@ export default function EventsPage(): React.ReactElement {
           )}
         </div>
 
-        {/* Notification Alert Bar */}
-        {notification && (
-          <div
-            className={`my-4 flex items-center justify-between rounded-xl border p-3.5 text-sm font-semibold ${
-              notification.type === 'success'
-                ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
-                : 'border-blue-200 bg-blue-50 text-blue-800'
-            }`}
+        {/* Floating Toast Notification (Zero Layout Shift) */}
+        {toast && (
+          <aside
+            aria-label="Notification Alert"
+            className="fixed right-6 bottom-6 z-50 flex max-w-md items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-xl ring-1 ring-black/5"
           >
-            <span>{notification.message}</span>
+            <div className="flex items-center gap-2.5">
+              {toast.type === 'success' ? (
+                <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600" />
+              ) : (
+                <Info className="h-5 w-5 shrink-0 text-[var(--uc-blue)]" />
+              )}
+              <span className="text-xs leading-snug font-semibold text-slate-800">
+                {toast.message}
+              </span>
+            </div>
             <button
-              onClick={() => setNotification(null)}
-              className="cursor-pointer text-xs font-bold underline"
+              onClick={() => setToast(null)}
+              aria-label="Dismiss notification"
+              className="cursor-pointer rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
             >
-              Dismiss
+              <X className="h-4 w-4" />
             </button>
-          </div>
+          </aside>
         )}
 
-        {/* Search & Category Filter Toolbar */}
-        <div className="mt-6 flex flex-col items-center justify-between gap-4 md:flex-row">
-          <div className="w-full md:w-96">
-            <Input
-              placeholder="Search by event title, venue, or organizer..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              leftIcon={<Search className="h-4 w-4" />}
-            />
-          </div>
-
-          {/* Event Type Filter Pills */}
-          <div className="flex w-full items-center gap-1.5 overflow-x-auto pb-2 md:w-auto md:pb-0">
+        {/* Filter Controls Toolbar */}
+        <div className="mt-6 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          {/* Segmented Scope Tab Buttons */}
+          <div className="flex items-center rounded-xl border border-slate-200 bg-slate-100/80 p-1">
             <button
-              onClick={() => setSelectedType('All')}
-              className={`cursor-pointer rounded-lg px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition-all ${
-                selectedType === 'All'
-                  ? 'bg-[var(--uc-blue)] text-white shadow-xs'
-                  : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+              onClick={() => setScopeTab('all')}
+              className={`flex cursor-pointer items-center gap-2 rounded-lg px-4 py-1.5 text-xs font-bold transition-all ${
+                scopeTab === 'all'
+                  ? 'bg-white text-slate-900 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              All Types
+              <span>All Events</span>
+              <span
+                className={`rounded-full px-2 py-0.5 font-mono text-[10px] ${
+                  scopeTab === 'all'
+                    ? 'bg-slate-100 text-slate-800'
+                    : 'bg-slate-200/70 text-slate-600'
+                }`}
+              >
+                {events.length}
+              </span>
             </button>
-            {eventTypes.map((type) => {
-              const isSelected = selectedType === type;
-              return (
-                <button
-                  key={type}
-                  onClick={() => setSelectedType(type)}
-                  className={`cursor-pointer rounded-lg px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition-all ${
-                    isSelected
-                      ? 'bg-[var(--uc-blue)] text-white shadow-xs'
-                      : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
-                  }`}
-                >
-                  {type}
-                </button>
-              );
-            })}
+
+            <button
+              onClick={() => setScopeTab('my_passes')}
+              className={`flex cursor-pointer items-center gap-2 rounded-lg px-4 py-1.5 text-xs font-bold transition-all ${
+                scopeTab === 'my_passes'
+                  ? 'bg-white text-slate-900 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Ticket className="h-3.5 w-3.5 text-[var(--uc-blue)]" />
+              <span>My Passes</span>
+              <span
+                className={`rounded-full px-2 py-0.5 font-mono text-[10px] ${
+                  scopeTab === 'my_passes'
+                    ? 'bg-[var(--uc-blue)] text-white'
+                    : 'bg-slate-200/70 text-slate-600'
+                }`}
+              >
+                {myPassesCount}
+              </span>
+            </button>
+          </div>
+
+          {/* Search Bar + Standardized Category Dropdown */}
+          <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
+            <div className="w-full sm:w-72">
+              <Input
+                placeholder="Search events, venues..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                leftIcon={<Search className="h-4 w-4 text-slate-400" />}
+              />
+            </div>
+
+            <div className="w-full sm:w-48">
+              <Dropdown
+                options={typeDropdownOptions}
+                value={selectedType}
+                onChange={(val) => setSelectedType(val)}
+                placeholder="All Categories"
+                size="md"
+              />
+            </div>
           </div>
         </div>
 
         {/* Events Grid */}
         <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filteredEvents.map((event) => {
-            const hasPass = registrations.some(
+            const userReg = registrations.find(
               (r) => r.eventId === event.id && r.studentId === currentUser.id,
             );
             return (
               <EventCard
                 key={event.id}
                 event={event}
-                hasPass={hasPass}
+                registration={userReg}
                 onClaimPass={handleClaimPass}
                 onViewTicket={handleViewTicket}
               />
@@ -174,24 +254,44 @@ export default function EventsPage(): React.ReactElement {
           })}
         </div>
 
+        {/* Empty State */}
         {filteredEvents.length === 0 && (
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-white py-16 text-center">
-            <Calendar className="mx-auto h-12 w-12 text-slate-300" />
-            <h3 className="mt-3 text-lg font-bold text-slate-800">No events matched your search</h3>
-            <p className="mt-1 text-xs text-slate-500">
-              Try adjusting your keyword filter or view all categories.
+          <div className="mt-10 rounded-2xl border border-dashed border-slate-200 bg-white px-6 py-16 text-center shadow-2xs">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-50 text-slate-400">
+              {scopeTab === 'my_passes' ? (
+                <Ticket className="h-6 w-6" />
+              ) : (
+                <Calendar className="h-6 w-6" />
+              )}
+            </div>
+            <h3 className="mt-3.5 text-base font-bold text-slate-900">
+              {scopeTab === 'my_passes'
+                ? 'No Event Passes Claimed Yet'
+                : 'No Matching Events Found'}
+            </h3>
+            <p className="mx-auto mt-1 max-w-sm text-xs text-slate-500">
+              {scopeTab === 'my_passes'
+                ? 'You have not registered for any upcoming events yet. Browse all events to secure your pass.'
+                : 'Try adjusting your keyword filter or select a different category to see available events.'}
             </p>
-            <Button
-              variant="outline"
-              size="sm"
-              className="mt-4"
-              onClick={() => {
-                setSearchQuery('');
-                setSelectedType('All');
-              }}
-            >
-              Reset Filters
-            </Button>
+            <div className="mt-5 flex items-center justify-center gap-2">
+              {scopeTab === 'my_passes' ? (
+                <Button variant="primary" size="sm" onClick={() => setScopeTab('all')}>
+                  Browse All Events
+                </Button>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setSearchQuery('');
+                    setSelectedType('All');
+                  }}
+                >
+                  Reset Filters
+                </Button>
+              )}
+            </div>
           </div>
         )}
       </div>
@@ -202,6 +302,7 @@ export default function EventsPage(): React.ReactElement {
         onClose={() => setIsTicketModalOpen(false)}
         event={selectedEventForModal}
         registration={activeRegistration}
+        onCancelRegistration={handleCancelRegistration}
       />
     </div>
   );

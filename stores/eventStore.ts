@@ -68,7 +68,7 @@ const INITIAL_EVENTS: EventItem[] = [
     endTime: '17:00',
     registrationDeadline: '2026-09-11 23:59',
     participantLimit: 100,
-    registeredCount: 84,
+    registeredCount: 30,
     status: 'Published',
     organizer: 'Alliance Computer Society',
     certificateEligible: true,
@@ -142,7 +142,7 @@ const INITIAL_REGISTRATIONS: EventRegistration[] = [
     registeredAt: '2026-09-04 10:15',
     qrCodeToken: 'UC-TKT-2024-10842-101',
     checkedIn: true,
-    checkedInAt: '2026-09-05 13:04',
+    checkedInAt: '2026-09-05 13:04:12',
     certificateEligible: true,
   },
   {
@@ -156,8 +156,9 @@ const INITIAL_REGISTRATIONS: EventRegistration[] = [
     status: 'confirmed',
     registeredAt: '2026-09-04 11:30',
     qrCodeToken: 'UC-TKT-2024-11200-101',
-    checkedIn: false,
-    certificateEligible: false,
+    checkedIn: true,
+    checkedInAt: '2026-09-05 13:06:45',
+    certificateEligible: true,
   },
   {
     id: 'reg-03',
@@ -171,8 +172,397 @@ const INITIAL_REGISTRATIONS: EventRegistration[] = [
     registeredAt: '2026-09-04 14:02',
     qrCodeToken: 'UC-TKT-2023-09411-101',
     checkedIn: true,
-    checkedInAt: '2026-09-05 13:12',
+    checkedInAt: '2026-09-05 13:08:20',
     certificateEligible: true,
+  },
+  {
+    id: 'reg-04',
+    eventId: 'evt-101',
+    studentId: 'usr-officer-01',
+    studentNumber: '2023-04921',
+    studentName: 'Samantha Reyes',
+    courseAndYear: 'BS Information Tech - 4th Year',
+    email: 'samantha.reyes@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 14:15',
+    qrCodeToken: 'UC-TKT-2023-04921-101',
+    checkedIn: true,
+    checkedInAt: '2026-09-05 13:10:05',
+    certificateEligible: true,
+  },
+  {
+    id: 'reg-05',
+    eventId: 'evt-101',
+    studentId: 'usr-std-05',
+    studentNumber: '2025-10022',
+    studentName: 'Clara Isabelle Santos',
+    courseAndYear: 'BS Computer Science - 1st Year',
+    email: 'clara.santos@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 15:20',
+    qrCodeToken: 'UC-TKT-2025-10022-101',
+    checkedIn: true,
+    checkedInAt: '2026-09-05 13:12:44',
+    certificateEligible: true,
+  },
+  {
+    id: 'reg-06',
+    eventId: 'evt-101',
+    studentId: 'usr-std-06',
+    studentNumber: '2024-15901',
+    studentName: 'Dominic Kyle Navarro',
+    courseAndYear: 'BS Information Tech - 2nd Year',
+    email: 'dominic.navarro@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 15:45',
+    qrCodeToken: 'UC-TKT-2024-15901-101',
+    checkedIn: true,
+    checkedInAt: '2026-09-05 13:15:30',
+    certificateEligible: true,
+  },
+  {
+    id: 'reg-07',
+    eventId: 'evt-101',
+    studentId: 'usr-std-07',
+    studentNumber: '2023-08712',
+    studentName: 'Andrea Nicole Ramos',
+    courseAndYear: 'BS Computer Science - 4th Year',
+    email: 'andrea.ramos@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 16:10',
+    qrCodeToken: 'UC-TKT-2023-08712-101',
+    checkedIn: true,
+    checkedInAt: '2026-09-05 13:18:12',
+    certificateEligible: true,
+  },
+  {
+    id: 'reg-08',
+    eventId: 'evt-101',
+    studentId: 'usr-std-08',
+    studentNumber: '2024-12340',
+    studentName: 'Marcus Gabriel Tan',
+    courseAndYear: 'BS Computer Engineering - 3rd Year',
+    email: 'marcus.tan@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 16:30',
+    qrCodeToken: 'UC-TKT-2024-12340-101',
+    checkedIn: true,
+    checkedInAt: '2026-09-05 13:21:50',
+    certificateEligible: true,
+  },
+  {
+    id: 'reg-09',
+    eventId: 'evt-101',
+    studentId: 'usr-std-09',
+    studentNumber: '2025-11099',
+    studentName: 'Sophia Louise Valdez',
+    courseAndYear: 'BS Information Systems - 1st Year',
+    email: 'sophia.valdez@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 17:00',
+    qrCodeToken: 'UC-TKT-2025-11099-101',
+    checkedIn: true,
+    checkedInAt: '2026-09-05 13:25:15',
+    certificateEligible: true,
+  },
+  {
+    id: 'reg-10',
+    eventId: 'evt-101',
+    studentId: 'usr-std-10',
+    studentNumber: '2024-10554',
+    studentName: 'Ethan James Bautista',
+    courseAndYear: 'BS Cybersecurity - 2nd Year',
+    email: 'ethan.bautista@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 17:15',
+    qrCodeToken: 'UC-TKT-2024-10554-101',
+    checkedIn: true,
+    checkedInAt: '2026-09-05 13:28:40',
+    certificateEligible: true,
+  },
+  {
+    id: 'reg-11',
+    eventId: 'evt-101',
+    studentId: 'usr-std-11',
+    studentNumber: '2023-07823',
+    studentName: 'Chloe Monique Flores',
+    courseAndYear: 'BS Computer Science - 4th Year',
+    email: 'chloe.flores@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 17:40',
+    qrCodeToken: 'UC-TKT-2023-07823-101',
+    checkedIn: true,
+    checkedInAt: '2026-09-05 13:30:22',
+    certificateEligible: true,
+  },
+  {
+    id: 'reg-12',
+    eventId: 'evt-101',
+    studentId: 'usr-std-12',
+    studentNumber: '2024-13490',
+    studentName: 'Joshua Miguel Castro',
+    courseAndYear: 'BS Information Tech - 3rd Year',
+    email: 'joshua.castro@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 18:05',
+    qrCodeToken: 'UC-TKT-2024-13490-101',
+    checkedIn: true,
+    checkedInAt: '2026-09-05 13:32:55',
+    certificateEligible: true,
+  },
+  {
+    id: 'reg-13',
+    eventId: 'evt-101',
+    studentId: 'usr-std-13',
+    studentNumber: '2025-12887',
+    studentName: 'Alyssa Marie Dizon',
+    courseAndYear: 'BS Data Analytics - 1st Year',
+    email: 'alyssa.dizon@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 18:30',
+    qrCodeToken: 'UC-TKT-2025-12887-101',
+    checkedIn: true,
+    checkedInAt: '2026-09-05 13:35:10',
+    certificateEligible: true,
+  },
+  {
+    id: 'reg-14',
+    eventId: 'evt-101',
+    studentId: 'usr-std-14',
+    studentNumber: '2024-14902',
+    studentName: 'Gabriel Antonio Cruz',
+    courseAndYear: 'BS Computer Engineering - 2nd Year',
+    email: 'gabriel.cruz@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 19:00',
+    qrCodeToken: 'UC-TKT-2024-14902-101',
+    checkedIn: true,
+    checkedInAt: '2026-09-05 13:38:45',
+    certificateEligible: true,
+  },
+  {
+    id: 'reg-15',
+    eventId: 'evt-101',
+    studentId: 'usr-std-15',
+    studentNumber: '2023-09110',
+    studentName: 'Patricia Anne Mercado',
+    courseAndYear: 'BS Information Systems - 4th Year',
+    email: 'patricia.mercado@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 19:15',
+    qrCodeToken: 'UC-TKT-2023-09110-101',
+    checkedIn: false,
+    certificateEligible: false,
+  },
+  {
+    id: 'reg-16',
+    eventId: 'evt-101',
+    studentId: 'usr-std-16',
+    studentNumber: '2024-10771',
+    studentName: 'Christian Dave Morales',
+    courseAndYear: 'BS Computer Science - 3rd Year',
+    email: 'christian.morales@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 19:30',
+    qrCodeToken: 'UC-TKT-2024-10771-101',
+    checkedIn: false,
+    certificateEligible: false,
+  },
+  {
+    id: 'reg-17',
+    eventId: 'evt-101',
+    studentId: 'usr-std-17',
+    studentNumber: '2025-13204',
+    studentName: 'Hannah Beatrice Ong',
+    courseAndYear: 'BS Information Tech - 1st Year',
+    email: 'hannah.ong@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 20:00',
+    qrCodeToken: 'UC-TKT-2025-13204-101',
+    checkedIn: false,
+    certificateEligible: false,
+  },
+  {
+    id: 'reg-18',
+    eventId: 'evt-101',
+    studentId: 'usr-std-18',
+    studentNumber: '2023-08654',
+    studentName: 'Vincent Paul Alcantara',
+    courseAndYear: 'BS Computer Engineering - 4th Year',
+    email: 'vincent.alcantara@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 20:20',
+    qrCodeToken: 'UC-TKT-2023-08654-101',
+    checkedIn: false,
+    certificateEligible: false,
+  },
+  {
+    id: 'reg-19',
+    eventId: 'evt-101',
+    studentId: 'usr-std-19',
+    studentNumber: '2024-11983',
+    studentName: 'Danielle Rose Soriano',
+    courseAndYear: 'BS Data Analytics - 2nd Year',
+    email: 'danielle.soriano@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 20:45',
+    qrCodeToken: 'UC-TKT-2024-11983-101',
+    checkedIn: false,
+    certificateEligible: false,
+  },
+  {
+    id: 'reg-20',
+    eventId: 'evt-101',
+    studentId: 'usr-std-20',
+    studentNumber: '2025-10443',
+    studentName: 'Rafael Luis Mendoza',
+    courseAndYear: 'BS Cybersecurity - 1st Year',
+    email: 'rafael.mendoza@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 21:00',
+    qrCodeToken: 'UC-TKT-2025-10443-101',
+    checkedIn: false,
+    certificateEligible: false,
+  },
+  {
+    id: 'reg-21',
+    eventId: 'evt-101',
+    studentId: 'usr-std-21',
+    studentNumber: '2024-12876',
+    studentName: 'Katrina Isabel Yap',
+    courseAndYear: 'BS Computer Science - 2nd Year',
+    email: 'katrina.yap@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 21:15',
+    qrCodeToken: 'UC-TKT-2024-12876-101',
+    checkedIn: false,
+    certificateEligible: false,
+  },
+  {
+    id: 'reg-22',
+    eventId: 'evt-101',
+    studentId: 'usr-std-22',
+    studentNumber: '2023-07991',
+    studentName: 'Angelo Miguel Fernandez',
+    courseAndYear: 'BS Information Tech - 4th Year',
+    email: 'angelo.fernandez@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 21:30',
+    qrCodeToken: 'UC-TKT-2023-07991-101',
+    checkedIn: false,
+    certificateEligible: false,
+  },
+  {
+    id: 'reg-23',
+    eventId: 'evt-101',
+    studentId: 'usr-std-23',
+    studentNumber: '2025-11802',
+    studentName: 'Bianca Camille Rivera',
+    courseAndYear: 'BS Information Systems - 1st Year',
+    email: 'bianca.rivera@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 21:45',
+    qrCodeToken: 'UC-TKT-2025-11802-101',
+    checkedIn: false,
+    certificateEligible: false,
+  },
+  {
+    id: 'reg-24',
+    eventId: 'evt-101',
+    studentId: 'usr-std-24',
+    studentNumber: '2024-13115',
+    studentName: 'Lorenzo Gabriel Ocampo',
+    courseAndYear: 'BS Computer Engineering - 3rd Year',
+    email: 'lorenzo.ocampo@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 22:00',
+    qrCodeToken: 'UC-TKT-2024-13115-101',
+    checkedIn: false,
+    certificateEligible: false,
+  },
+  {
+    id: 'reg-25',
+    eventId: 'evt-101',
+    studentId: 'usr-std-25',
+    studentNumber: '2023-09328',
+    studentName: 'Maria Elena Tolentino',
+    courseAndYear: 'BS Computer Science - 4th Year',
+    email: 'maria.tolentino@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 22:15',
+    qrCodeToken: 'UC-TKT-2023-09328-101',
+    checkedIn: false,
+    certificateEligible: false,
+  },
+  {
+    id: 'reg-26',
+    eventId: 'evt-101',
+    studentId: 'usr-std-26',
+    studentNumber: '2024-14562',
+    studentName: 'Kevin Matthew Salazar',
+    courseAndYear: 'BS Cybersecurity - 2nd Year',
+    email: 'kevin.salazar@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 22:30',
+    qrCodeToken: 'UC-TKT-2024-14562-101',
+    checkedIn: false,
+    certificateEligible: false,
+  },
+  {
+    id: 'reg-27',
+    eventId: 'evt-101',
+    studentId: 'usr-std-27',
+    studentNumber: '2025-12009',
+    studentName: 'Stephanie Joyce Pineda',
+    courseAndYear: 'BS Data Analytics - 1st Year',
+    email: 'stephanie.pineda@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 22:45',
+    qrCodeToken: 'UC-TKT-2025-12009-101',
+    checkedIn: false,
+    certificateEligible: false,
+  },
+  {
+    id: 'reg-28',
+    eventId: 'evt-101',
+    studentId: 'usr-std-28',
+    studentNumber: '2024-10338',
+    studentName: 'Adrian Paolo De Leon',
+    courseAndYear: 'BS Information Tech - 3rd Year',
+    email: 'adrian.deleon@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 23:00',
+    qrCodeToken: 'UC-TKT-2024-10338-101',
+    checkedIn: false,
+    certificateEligible: false,
+  },
+  {
+    id: 'reg-29',
+    eventId: 'evt-101',
+    studentId: 'usr-std-29',
+    studentNumber: '2023-08117',
+    studentName: 'Kimberly Nicole Sy',
+    courseAndYear: 'BS Information Systems - 4th Year',
+    email: 'kimberly.sy@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 23:15',
+    qrCodeToken: 'UC-TKT-2023-08117-101',
+    checkedIn: false,
+    certificateEligible: false,
+  },
+  {
+    id: 'reg-30',
+    eventId: 'evt-101',
+    studentId: 'usr-std-30',
+    studentNumber: '2024-15220',
+    studentName: 'Raymond Kyle Villanueva',
+    courseAndYear: 'BS Computer Engineering - 2nd Year',
+    email: 'raymond.villanueva@uc.edu.ph',
+    status: 'confirmed',
+    registeredAt: '2026-09-04 23:30',
+    qrCodeToken: 'UC-TKT-2024-15220-101',
+    checkedIn: false,
+    certificateEligible: false,
   },
 ];
 
@@ -280,6 +670,7 @@ type EventState = {
     officerName: string,
   ) => { success: boolean; message: string; record?: EventRegistration };
   toggleCertificateEligibility: (registrationId: string) => void;
+  undoCheckIn: (registrationId: string) => void;
   approveMemberRequest: (requestId: string) => void;
   rejectMemberRequest: (requestId: string) => void;
   toggleMemberActive: (memberId: string) => void;
@@ -287,6 +678,163 @@ type EventState = {
   addVenue: (venue: Omit<Venue, 'id'>) => void;
   addEventType: (type: EventType) => void;
 };
+
+const INITIAL_ATTENDANCE_LOGS: AttendanceCheckInLog[] = [
+  {
+    id: 'log-14',
+    eventId: 'evt-101',
+    eventTitle: 'CodeCraft: Advanced Next.js & Full-Stack Architecture',
+    studentNumber: '2024-14902',
+    studentName: 'Gabriel Antonio Cruz',
+    courseAndYear: 'BS Computer Engineering - 2nd Year',
+    timestamp: '2026-09-05 13:38:45',
+    method: 'QR_SCAN',
+    verifiedBy: 'Samantha Reyes (Officer)',
+  },
+  {
+    id: 'log-13',
+    eventId: 'evt-101',
+    eventTitle: 'CodeCraft: Advanced Next.js & Full-Stack Architecture',
+    studentNumber: '2025-12887',
+    studentName: 'Alyssa Marie Dizon',
+    courseAndYear: 'BS Data Analytics - 1st Year',
+    timestamp: '2026-09-05 13:35:10',
+    method: 'QR_SCAN',
+    verifiedBy: 'Samantha Reyes (Officer)',
+  },
+  {
+    id: 'log-12',
+    eventId: 'evt-101',
+    eventTitle: 'CodeCraft: Advanced Next.js & Full-Stack Architecture',
+    studentNumber: '2024-13490',
+    studentName: 'Joshua Miguel Castro',
+    courseAndYear: 'BS Information Tech - 3rd Year',
+    timestamp: '2026-09-05 13:32:55',
+    method: 'MANUAL_SEARCH',
+    verifiedBy: 'Samantha Reyes (Officer)',
+  },
+  {
+    id: 'log-11',
+    eventId: 'evt-101',
+    eventTitle: 'CodeCraft: Advanced Next.js & Full-Stack Architecture',
+    studentNumber: '2023-07823',
+    studentName: 'Chloe Monique Flores',
+    courseAndYear: 'BS Computer Science - 4th Year',
+    timestamp: '2026-09-05 13:30:22',
+    method: 'QR_SCAN',
+    verifiedBy: 'Samantha Reyes (Officer)',
+  },
+  {
+    id: 'log-10',
+    eventId: 'evt-101',
+    eventTitle: 'CodeCraft: Advanced Next.js & Full-Stack Architecture',
+    studentNumber: '2024-10554',
+    studentName: 'Ethan James Bautista',
+    courseAndYear: 'BS Cybersecurity - 2nd Year',
+    timestamp: '2026-09-05 13:28:40',
+    method: 'QR_SCAN',
+    verifiedBy: 'Samantha Reyes (Officer)',
+  },
+  {
+    id: 'log-09',
+    eventId: 'evt-101',
+    eventTitle: 'CodeCraft: Advanced Next.js & Full-Stack Architecture',
+    studentNumber: '2025-11099',
+    studentName: 'Sophia Louise Valdez',
+    courseAndYear: 'BS Information Systems - 1st Year',
+    timestamp: '2026-09-05 13:25:15',
+    method: 'MANUAL_SEARCH',
+    verifiedBy: 'Samantha Reyes (Officer)',
+  },
+  {
+    id: 'log-08',
+    eventId: 'evt-101',
+    eventTitle: 'CodeCraft: Advanced Next.js & Full-Stack Architecture',
+    studentNumber: '2024-12340',
+    studentName: 'Marcus Gabriel Tan',
+    courseAndYear: 'BS Computer Engineering - 3rd Year',
+    timestamp: '2026-09-05 13:21:50',
+    method: 'QR_SCAN',
+    verifiedBy: 'Samantha Reyes (Officer)',
+  },
+  {
+    id: 'log-07',
+    eventId: 'evt-101',
+    eventTitle: 'CodeCraft: Advanced Next.js & Full-Stack Architecture',
+    studentNumber: '2023-08712',
+    studentName: 'Andrea Nicole Ramos',
+    courseAndYear: 'BS Computer Science - 4th Year',
+    timestamp: '2026-09-05 13:18:12',
+    method: 'QR_SCAN',
+    verifiedBy: 'Samantha Reyes (Officer)',
+  },
+  {
+    id: 'log-06',
+    eventId: 'evt-101',
+    eventTitle: 'CodeCraft: Advanced Next.js & Full-Stack Architecture',
+    studentNumber: '2024-15901',
+    studentName: 'Dominic Kyle Navarro',
+    courseAndYear: 'BS Information Tech - 2nd Year',
+    timestamp: '2026-09-05 13:15:30',
+    method: 'QR_SCAN',
+    verifiedBy: 'Samantha Reyes (Officer)',
+  },
+  {
+    id: 'log-05',
+    eventId: 'evt-101',
+    eventTitle: 'CodeCraft: Advanced Next.js & Full-Stack Architecture',
+    studentNumber: '2025-10022',
+    studentName: 'Clara Isabelle Santos',
+    courseAndYear: 'BS Computer Science - 1st Year',
+    timestamp: '2026-09-05 13:12:44',
+    method: 'MANUAL_SEARCH',
+    verifiedBy: 'Samantha Reyes (Officer)',
+  },
+  {
+    id: 'log-04',
+    eventId: 'evt-101',
+    eventTitle: 'CodeCraft: Advanced Next.js & Full-Stack Architecture',
+    studentNumber: '2023-04921',
+    studentName: 'Samantha Reyes',
+    courseAndYear: 'BS Information Tech - 4th Year',
+    timestamp: '2026-09-05 13:10:05',
+    method: 'QR_SCAN',
+    verifiedBy: 'Samantha Reyes (Officer)',
+  },
+  {
+    id: 'log-03',
+    eventId: 'evt-101',
+    eventTitle: 'CodeCraft: Advanced Next.js & Full-Stack Architecture',
+    studentNumber: '2023-09411',
+    studentName: 'Justin Tyler Lim',
+    courseAndYear: 'BS Computer Engineering - 4th Year',
+    timestamp: '2026-09-05 13:08:20',
+    method: 'QR_SCAN',
+    verifiedBy: 'Samantha Reyes (Officer)',
+  },
+  {
+    id: 'log-02',
+    eventId: 'evt-101',
+    eventTitle: 'CodeCraft: Advanced Next.js & Full-Stack Architecture',
+    studentNumber: '2024-11200',
+    studentName: 'Beatriz Patricia Gomez',
+    courseAndYear: 'BS Information Systems - 2nd Year',
+    timestamp: '2026-09-05 13:06:45',
+    method: 'QR_SCAN',
+    verifiedBy: 'Samantha Reyes (Officer)',
+  },
+  {
+    id: 'log-01',
+    eventId: 'evt-101',
+    eventTitle: 'CodeCraft: Advanced Next.js & Full-Stack Architecture',
+    studentNumber: '2024-10842',
+    studentName: 'Nikko Dela Cruz',
+    courseAndYear: 'BS Computer Science - 3rd Year',
+    timestamp: '2026-09-05 13:04:12',
+    method: 'QR_SCAN',
+    verifiedBy: 'Samantha Reyes (Officer)',
+  },
+];
 
 export const useEventStore = create<EventState>()(
   persist(
@@ -297,19 +845,7 @@ export const useEventStore = create<EventState>()(
       registrations: INITIAL_REGISTRATIONS,
       members: INITIAL_MEMBERS,
       registrationRequests: INITIAL_REG_REQUESTS,
-      attendanceLogs: [
-        {
-          id: 'log-01',
-          eventId: 'evt-101',
-          eventTitle: 'CodeCraft: Advanced Next.js & Full-Stack Architecture',
-          studentNumber: '2024-10842',
-          studentName: 'Nikko Dela Cruz',
-          courseAndYear: 'BS Computer Science - 3rd Year',
-          timestamp: '2026-09-05 13:04:12',
-          method: 'QR_SCAN',
-          verifiedBy: 'Samantha Reyes (Officer)',
-        },
-      ],
+      attendanceLogs: INITIAL_ATTENDANCE_LOGS,
       auditLogs: [
         {
           id: 'aud-01',
@@ -353,14 +889,54 @@ export const useEventStore = create<EventState>()(
         const event = events.find((e) => e.id === eventId);
         if (!event) return { success: false, message: 'Event not found.' };
 
-        // Check already registered
+        // 1. Deadline Validation: Prevent registrations past the registration deadline
+        if (event.registrationDeadline) {
+          const deadlineDate = new Date(event.registrationDeadline.replace(' ', 'T'));
+          if (!isNaN(deadlineDate.getTime()) && new Date() > deadlineDate) {
+            return {
+              success: false,
+              message: `Registration closed. The deadline was ${event.registrationDeadline}.`,
+            };
+          }
+        }
+
+        // 2. Check already registered (and active)
         const existing = registrations.find(
           (r) => r.eventId === eventId && r.studentId === student.id,
         );
         if (existing) {
-          return { success: false, message: 'You have already claimed a pass for this event.' };
+          if (existing.status === 'cancelled') {
+            // Re-activate a previously cancelled registration
+            const isFull = event.registeredCount >= event.participantLimit;
+            const newStatus = isFull ? 'waitlisted' : 'confirmed';
+
+            set((state) => ({
+              registrations: state.registrations.map((r) =>
+                r.id === existing.id
+                  ? {
+                      ...r,
+                      status: newStatus,
+                      registeredAt: new Date().toISOString().replace('T', ' ').slice(0, 16),
+                    }
+                  : r,
+              ),
+              events: state.events.map((e) =>
+                e.id === eventId ? { ...e, registeredCount: e.registeredCount + 1 } : e,
+              ),
+            }));
+
+            return {
+              success: true,
+              message: isFull
+                ? 'Event limit reached. Re-registered and placed on waitlist!'
+                : 'Registration reinstated successfully! See your pass.',
+            };
+          }
+
+          return { success: false, message: 'You already hold a registration for this event.' };
         }
 
+        // 3. Capacity Validation: assign confirmed vs. waitlisted
         const isFull = event.registeredCount >= event.participantLimit;
         const status = isFull ? 'waitlisted' : 'confirmed';
         const qrCodeToken = `UC-TKT-${student.studentNumber}-${event.id}`;
@@ -390,19 +966,39 @@ export const useEventStore = create<EventState>()(
         return {
           success: true,
           message: isFull
-            ? 'Event limit reached. Added to waitlist!'
+            ? 'Event limit reached. Added to official waitlist!'
             : 'Pass claimed successfully! See your digital ticket.',
         };
       },
 
       cancelRegistration: (eventId, studentId) => {
+        const { registrations } = get();
+        const existing = registrations.find(
+          (r) => r.eventId === eventId && r.studentId === studentId,
+        );
+        if (!existing || existing.status === 'cancelled') return;
+
         set((state) => ({
-          registrations: state.registrations.filter(
-            (r) => !(r.eventId === eventId && r.studentId === studentId),
+          registrations: state.registrations.map((r) =>
+            r.eventId === eventId && r.studentId === studentId
+              ? { ...r, status: 'cancelled' as const }
+              : r,
           ),
           events: state.events.map((e) =>
             e.id === eventId ? { ...e, registeredCount: Math.max(0, e.registeredCount - 1) } : e,
           ),
+          auditLogs: [
+            {
+              id: `aud-${Date.now()}`,
+              timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19),
+              action: 'CANCEL_REGISTRATION',
+              actorName: existing.studentName,
+              actorRole: 'Student',
+              target: eventId,
+              details: `Cancelled registration for event ${eventId}`,
+            },
+            ...state.auditLogs,
+          ],
         }));
       },
 
@@ -476,6 +1072,22 @@ export const useEventStore = create<EventState>()(
         }));
       },
 
+      undoCheckIn: (registrationId) => {
+        const reg = get().registrations.find((r) => r.id === registrationId);
+        if (!reg || !reg.checkedIn) return;
+
+        set((state) => ({
+          registrations: state.registrations.map((r) =>
+            r.id === registrationId
+              ? { ...r, checkedIn: false, checkedInAt: undefined, certificateEligible: false }
+              : r,
+          ),
+          attendanceLogs: state.attendanceLogs.filter(
+            (log) => !(log.studentNumber === reg.studentNumber && log.eventId === reg.eventId),
+          ),
+        }));
+      },
+
       approveMemberRequest: (requestId) => {
         const req = get().registrationRequests.find((r) => r.id === requestId);
         if (!req) return;
@@ -542,7 +1154,7 @@ export const useEventStore = create<EventState>()(
       },
     }),
     {
-      name: 'ucevents-event-store',
+      name: 'ucevents-event-store-v4',
     },
   ),
 );
