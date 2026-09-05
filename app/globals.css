@@ -1,8 +1,19 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+
+  /* UCEvents Brand Tokens */
+  --uc-blue: #1875ba;
+  --uc-blue-deep: #0e5289;
+  --uc-blue-light: #489fe0;
+  --uc-blue-container: #d9eaf7;
+
+  --uc-gold: #f5ba13;
+  --uc-gold-bright: #ffd200;
+  --uc-gold-deep: #c69400;
+  --uc-gold-container: #fff4c7;
 }
 
 @theme inline {
@@ -10,13 +21,16 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-uc-blue: var(--uc-blue);
+  --color-uc-blue-deep: var(--uc-blue-deep);
+  --color-uc-blue-light: var(--uc-blue-light);
+  --color-uc-blue-container: var(--uc-blue-container);
+
+  --color-uc-gold: var(--uc-gold);
+  --color-uc-gold-bright: var(--uc-gold-bright);
+  --color-uc-gold-deep: var(--uc-gold-deep);
+  --color-uc-gold-container: var(--uc-gold-container);
 }
 
 body {
